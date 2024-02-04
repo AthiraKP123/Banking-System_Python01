@@ -1,0 +1,72 @@
+class BankAccount:
+    def __init__(self, account_number, pin, balance=0):
+        self.account_number = account_number
+        self.pin = pin
+        self.balance = balance
+
+    def login(self, entered_account_number, entered_pin):
+        return entered_account_number == self.account_number and entered_pin == self.pin
+
+    def deposit(self, amount):
+        self.balance += amount
+        print(f"Amount {amount} deposited successfully.")
+        input("Press Enter to continue...")
+
+    def withdraw(self, amount):
+        if amount <= self.balance:
+            self.balance -= amount
+            print(f"Amount {amount} withdrawn successfully.")
+        else:
+            print("Oops! Insufficient funds")
+        input("Press Enter to continue...")
+
+    def check_balance(self):
+        print(f"Your current balance is {self.balance}")
+        input("Press Enter to continue...")
+
+
+# Predefined list of bank account holders
+accounts_info = [
+    {"account_number": "12345678", "pin": "1010", "balance": 15000},
+    {"account_number": "87654321", "pin": "5050", "balance": 20000},
+    # Add more account details if needed
+]
+
+# Create BankAccount instances for each account holder
+bank_accounts = []
+for info in accounts_info:
+    bank_accounts.append(BankAccount(info["account_number"], info["pin"], info["balance"]))
+
+# Main program loop
+while True:
+    print("\nWelcome to the Bank")
+    entered_account_number = input("Enter your account number: ")
+    entered_pin = input("Enter your 4 digit PIN: ")
+
+    # Check if the entered credentials are valid
+    for account in bank_accounts:
+        if account.login(entered_account_number, entered_pin):
+            while True:
+                print("\n1. Deposit")
+                print("2. Withdraw")
+                print("3. Check Balance")
+                print("4. Exit")
+                choice = input("Enter your choice: ")
+
+                if choice == "1":
+                    amount = float(input("Enter the amount to deposit: "))
+                    account.deposit(amount)
+                elif choice == "2":
+                    amount = float(input("Enter the amount to withdraw: "))
+                    account.withdraw(amount)
+                elif choice == "3":
+                    account.check_balance()
+                elif choice == "4":
+                    print("Thank you for banking with us!\nHave a great day:)")
+                    exit()
+                else:
+                    print("Invalid choice. Please enter a valid option.")
+        else:
+            continue
+
+    print("Invalid credentials that you have entered. Please try again.")
