@@ -36,19 +36,23 @@ accounts_info = [
 ]
 
 # Create BankAccount instances for each account holder
-bank_accounts = []
-for info in accounts_info:
-    bank_accounts.append(BankAccount(info["account_number"], info["pin"], info["balance"]))
+bank_accounts = [BankAccount(info["account_number"], info["pin"], info["balance"]) for info in accounts_info]
 
-# Main program loop
-while True:
-    print("\nWelcome to the Bank")
-    entered_account_number = input("Enter your account number: ")
-    entered_pin = input("Enter your 4 digit PIN: ")
-
-    # Check if the entered credentials are valid
+def find_account(entered_account_number, entered_pin):
     for account in bank_accounts:
         if account.login(entered_account_number, entered_pin):
+            return account
+    return None
+
+def main():
+    while True:
+        print("\nWelcome to the Bank")
+        entered_account_number = input("Enter your account number: ")
+        entered_pin = input("Enter your 4 digit PIN: ")
+
+        account = find_account(entered_account_number, entered_pin)
+
+        if account:
             while True:
                 print("\n1. Deposit")
                 print("2. Withdraw")
@@ -66,10 +70,11 @@ while True:
                     account.check_balance()
                 elif choice == "4":
                     print("Thank you for banking with us!\nHave a great day:)")
-                    exit()
+                    return
                 else:
                     print("Invalid choice. Please enter a valid option.")
         else:
-            continue
+            print("Invalid credentials. Please try again.")
 
-    print("Invalid credentials that you have entered. Please try again.")
+if __name__ == "__main__":
+    main()
